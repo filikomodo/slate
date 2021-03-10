@@ -222,12 +222,12 @@ message | string | If error, it will show error message.
 
 # Trade Confirmation
 
-## Trade Confirmation Export
-Export Trade Confirmation.
+## Purchase Order Creation
+Create Purchase Order from Trade Confirmation.
 
 ### HTTP Request
 
-Komodo will call client's <code>TC_EXPORT_URL</code> service.
+Komodo will call client's <code>PO_CREATION_URL</code> service.
 
 > WSDL
 
