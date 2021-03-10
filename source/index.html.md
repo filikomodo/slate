@@ -38,7 +38,7 @@ Values for the JWT Header are:
 
 Name | Description
 --------- | -----------
-**alg** | The encryption algorithm used to generate the JWT. **RS256** is supported.
+**alg** | The encryption algorithm used to generate the JWT. **HS256** is supported.
 **typ** | The token structure. Set to **JWT**
 
 Values for the payload claims are:
