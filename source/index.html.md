@@ -174,7 +174,7 @@ This service offers client to update vendor synchronization status to Komodo.
 
 ### HTTP Request
 
-`PUT https://dev.gokomodo.co/api/vendors`
+`PUT https://dev.gokomodo.co/v1/api/vendors`
 
 > Request Sample
 
@@ -222,393 +222,179 @@ message | string | If error, it will show error message.
 
 # Trade Confirmation
 
-## Purchase Order Creation
-Create Purchase Order from Trade Confirmation.
+## Unexported Trade Confirmations
+Get all unexported Trade Confirmations
 
 ### HTTP Request
 
-Komodo will call client's <code>PO_CREATION_URL</code> service.
+`GET https://dev.gokomodo.co/v1/api/trade-confirmations`
 
-> WSDL
+> Success Response
 
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions targetNamespace="urn:sap-com:document:sap:soap:functions:mc-style"
-	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
-	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
-	xmlns:tns="urn:sap-com:document:sap:soap:functions:mc-style"
-	xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
-	xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
-	xmlns:n1="urn:sap-com:document:sap:rfc:functions">
-	<wsdl:documentation>
-		<sidl:sidl
-			xmlns:sidl="http://www.sap.com/2007/03/sidl"/>
-		</wsdl:documentation>
-		<wsp:UsingPolicy wsdl:required="true"/>
-		<wsp:Policy wsu:Id="IF_ZWS_TEST1">
-			<sapsession:Session
-				xmlns:sapsession="http://www.sap.com/webas/630/soap/features/session/">
-				<sapsession:enableSession>false</sapsession:enableSession>
-			</sapsession:Session>
-		</wsp:Policy>
-		<wsp:Policy wsu:Id="OP_ZwsTest">
-			<sapcomhnd:enableCommit
-				xmlns:sapcomhnd="http://www.sap.com/NW05/soap/features/commit/">false
-			</sapcomhnd:enableCommit>
-			<sapblock:enableBlocking
-				xmlns:sapblock="http://www.sap.com/NW05/soap/features/blocking/">true
-			</sapblock:enableBlocking>
-			<saptrhnw05:required
-				xmlns:saptrhnw05="http://www.sap.com/NW05/soap/features/transaction/">no
-			</saptrhnw05:required>
-			<saprmnw05:enableWSRM
-				xmlns:saprmnw05="http://www.sap.com/NW05/soap/features/wsrm/">false
-			</saprmnw05:enableWSRM>
-		</wsp:Policy>
-		<wsdl:types>
-			<xsd:schema attributeFormDefault="qualified" targetNamespace="urn:sap-com:document:sap:soap:functions:mc-style"
-				xmlns:n0="urn:sap-com:document:sap:rfc:functions">
-				<xsd:import namespace="urn:sap-com:document:sap:rfc:functions"/>
-                <xsd:complexType name="Location">
-                    <xsd:sequence>
-                        <xsd:element name="AddressLine1" type="xsd:string"/>
-                        <xsd:element name="AddressLine2" type="xsd:string"/>
-                        <xsd:element name="Subdistrict" type="xsd:string"/>
-                        <xsd:element name="City" type="xsd:string"/>
-                        <xsd:element name="Province" type="xsd:string"/>
-                        <xsd:element name="PostalCode" type="xsd:string"/>
-                        <xsd:element name="Longitude" type="xsd:string"/>
-                        <xsd:element name="Latitude" type="xsd:string"/>
-                    </xsd:sequence>
-                </xsd:complexType>
-                <xsd:complexType name="DeliveryInformation">
-                    <xsd:sequence>
-                        <xsd:element name="CompanyName" type="xsd:string"/>
-                        <xsd:element name="CompanyID" type="xsd:long"/>
-                        <xsd:element name="InternalID" type="xsd:string"/>
-                        <xsd:element name="Location" type="tns:Location"/>
-                    </xsd:sequence>
-                </xsd:complexType>
-                <xsd:complexType name="RequestedItem">
-                    <xsd:sequence>
-                        <xsd:element name="Name" type="xsd:string"/>
-                        <xsd:element name="Quantity" type="xsd:int"/>
-                        <xsd:element name="Brand" type="xsd:string"/>
-                        <xsd:element name="Uom" type="xsd:string"/>
-                        <xsd:element name="MaterialNumber" type="xsd:string"/>
-                        <xsd:element name="PRItemID" type="xsd:string"/>
-                    </xsd:sequence>
-                </xsd:complexType>
-                <xs:complexType name="RequestedItems">
-                    <xs:sequence>
-                        <xs:element minOccurs="0" maxOccurs="unbounded" name="RequestedItem" nillable="true" type="tns:RequestedItem"/>
-                    </xs:sequence>
-                </xs:complexType>
-                <xsd:complexType name="DeliveryItem">
-                    <xsd:sequence>
-                        <xsd:element name="Name" type="xsd:string"/>
-                        <xsd:element name="Quantity" type="xsd:int"/>
-                        <xsd:element name="Brand" type="xsd:string"/>
-                        <xsd:element name="Uom" type="xsd:string"/>
-                        <xsd:element name="PRItemID" type="xsd:string"/>
-                        <xsd:element name="UnitCost" type="xsd:double"/>
-                        <xsd:element name="DeliveryCost" type="xsd:double"/>
-                        <xsd:element name="DiscountValue" type="xsd:double"/>
-                        <xsd:element name="DiscountType" type="xsd:string"/>
-                        <xsd:element name="DiscountTotal" type="xsd:double"/>
-                        <xsd:element name="Total" type="xsd:double"/>
-                        <xsd:element name="Notes" type="xsd:string"/>
-                    </xsd:sequence>
-                </xsd:complexType>
-                <xs:complexType name="DeliveryItems">
-                    <xs:sequence>
-                        <xs:element minOccurs="0" maxOccurs="unbounded" name="DeliveryItem" nillable="true" type="tns:DeliveryItem"/>
-                    </xs:sequence>
-                </xs:complexType>
-                <xsd:complexType name="Delivery">
-                    <xsd:sequence>
-                        <xsd:element name="PRID" type="xsd:string"/>
-                        <xsd:element name="DeliveryInformation" type="tns:DeliveryInformation"/>
-                        <xsd:element name="RequestedItems" type="tns:RequestedItems"/>
-                        <xsd:element name="DeliveryItems" type="tns:DeliveryItems"/>
-                        <xsd:element name="Total" type="xsd:double"/>
-                        <xsd:element name="TotalDeliveryCost" type="xsd:double"/>
-                    </xsd:sequence>
-                </xsd:complexType>
-                <xs:complexType name="Deliveries">
-                    <xs:sequence>
-                        <xs:element minOccurs="0" maxOccurs="unbounded" name="Delivery" nillable="true" type="tns:Delivery"/>
-                    </xs:sequence>
-                </xs:complexType>
-                <xsd:complexType name="Rfq">
-                    <xsd:sequence>
-                        <xsd:element name="RfqID" type="xsd:string"/>
-                        <xsd:element name="VendorID" type="xsd:long"/>
-                        <xsd:element name="Subject" type="xsd:string"/>
-                        <xsd:element name="DatePosted" type="xsd:string"/>
-                        <xsd:element name="SubmissionDeadline" type="xsd:string"/>
-                        <xsd:element name="ExpectedDeliveryStart" type="xsd:string"/>
-                        <xsd:element name="ExpectedDeliveryEnd" type="xsd:string"/>
-                        <xsd:element name="PaymentTerms" type="xsd:string"/>
-                        <xsd:element name="RootCategory" type="xsd:string"/>
-                    </xsd:sequence>
-                </xsd:complexType>
-                <xsd:complexType name="Company">
-                    <xsd:sequence>
-                        <xsd:element name="ID" type="xsd:long"/>
-                    </xsd:sequence>
-                </xsd:complexType>
-                <xsd:complexType name="User">
-                    <xsd:sequence>
-                        <xsd:element name="Email" type="xsd:string"/>
-                    </xsd:sequence>
-                </xsd:complexType>
-                <xsd:complexType name="PaymentTerm">
-                    <xsd:sequence>
-                      <xsd:element name="ID" type="xsd:string"/>
-                      <xsd:element name="Text" type="xsd:string"/>
-                    </xsd:sequence>
-                </xsd:complexType>
-                <xsd:element name="TradeConfirmation">
-                    <xsd:complexType>
-                        <xsd:sequence>
-                            <xsd:element name="TcID" type="xsd:string"/>
-                            <xsd:element name="Rfq" type="tns:Rfq"/>
-                            <xsd:element name="Deliveries" type="tns:Deliveries"/>
-                            <xsd:element name="DeliveryMethod" type="xsd:int"/>
-                            <xsd:element name="Creator" type="tns:User"/>
-                            <xsd:element name="PaymentTerm" type="tns:PaymentTerm"/>
-                            <xsd:element name="Vendor" type="tns:Company"/>
-                            <xsd:element name="IncludeTax" type="xsd:int"/>
-                            <xsd:element name="TaxTotal" type="xsd:double"/>
-                            <xsd:element name="DiscountValue" type="xsd:double"/>
-                            <xsd:element name="DiscountType" type="xsd:string"/>
-                            <xsd:element name="DiscountTotal" type="xsd:double"/>
-                            <xsd:element name="Total" type="xsd:double"/>
-                        </xsd:sequence>
-                    </xsd:complexType>
-                </xsd:element>
-				<xsd:element name="TradeConfirmationResp">
-					<xsd:complexType>
-						<xsd:sequence>
-							<xsd:element name="Status" type="xsd:int"/>
-                            <xsd:element name="Message" type="xsd:string"/>
-						</xsd:sequence>
-					</xsd:complexType>
-				</xsd:element>
-			</xsd:schema>
-		</wsdl:types>
-		<wsdl:message name="TradeConfirmationRequest">
-			<wsdl:part name="parameters" element="tns:TradeConfirmation"/>
-		</wsdl:message>
-		<wsdl:message name="TradeConfirmationResponse">
-			<wsdl:part name="parameter" element="tns:TradeConfirmationResp"/>
-		</wsdl:message>
-		<wsdl:portType name="ZWS_TEST1">
-			<wsp:Policy>
-				<wsp:PolicyReference URI="#IF_ZWS_TEST1"/>
-			</wsp:Policy>
-			<wsdl:operation name="ZwsTest">
-				<wsp:Policy>
-					<wsp:PolicyReference URI="#OP_ZwsTest"/>
-				</wsp:Policy>
-				<wsdl:input message="tns:TradeConfirmationRequest"/>
-				<wsdl:output message="tns:TradeConfirmationResponse"/>
-			</wsdl:operation>
-		</wsdl:portType>
-	</wsdl:definitions>
+```json
+{
+  "status": 200,
+  "message": "Success",
+  "data":[
+    {
+      "tc_id":"XyA3Rt"
+    },
+    {
+      "tc_id":"X3RTYz"
+    },
+    {
+      "tc_id":"EwRaTZ"
+    }
+  ]
+}
 ```
 
-### Request
+### Response
 
 Field | Data Type | Description
 --------- | ------- | ----------- | -----------
-TcID | string | Trade Confirmation no
-IncludeTax | integer | 0 = no, 1 = include tax
-TaxTotal | double | Total Tax Amount
-DiscountType | string | Percent or amount
-DiscountValue | double | TC Discount value or amount
-DiscountTotal | double | TC total discount
-Total | double | TC Total
-Delivery Method | integer | 0 = Franco
-**Rfq** |  |
-  RfqID | string | RFQ ID
-  VendorID | integer | Vendor ID
-  DatePosted | string | RFQ Posting date
-  SubmissionDeadline | string | RFQ Submission deadline
-  ExpectedDeliveryStart | string | RFQ Expected Delivery Start
-  ExpectedDeliveryEnd | string | RFQ Expected Delivery End
-  RootCategory | string | RFQ Root category
-**Deliveries** |  |
-  PRID | string | PR No
-  **Delivery Information** | |
-    CompanyName | string | Destination company name
-    CompanyID | integer | Company id
-    InternalID | string | Company internal id/code
-    **Location** | |
-      AddressLine1 | string | Address line
-      AddressLine2 | string | Address line 2
-      Subdistrict | string | Subdistrict
-      City | string | City
-      Province | string | Province
-      PostalCode | string | PostalCode
-      Longitude | string | Delivery location Longitude
-      Latitude | string | Delivery location Latitude
-  **RequestedItems** | |
-    Name | string | Product name
-    Quantity | integer | Requested quantity
-    Brand | string | Requested Brand
-    Uom | string | Unit of measure
-    MaterialNumber | string | Material number
-    PRItemID | string | PR Item ID
-  **DeliveryItems** | |
-    Name | string | Product name
-    Quantity | integer | Requested quantity
-    Brand | string | Requested Brand
-    Uom | string | Unit of measure
-    PRItemID | string | PR Item ID
-    UnitCost | double | Unit Cost
-    DeliveryCost | double | Delivery Cost
-    DiscountType | string | Percent or amount
-    DiscountValue | double | Item Discount value or amount
-    DiscountTotal | double | Item total discount
-    Total | double | Total amount
-    Notes | string | Product specification
-  Total | double | Delivery total amount
-  TotalDeliveryCost | double | Delivery total cost
-**Creator** |  |
-  Email | string | Creator's email address
-**PaymentTerm** |  |
-  ID | string | Payment Term id/code
-  Text | string | Payment Term text
-**Vendor** |  |
-  ID | integer | Vendor ID
+status | int | Update status.
+message | string | If error, it will show error message.
+data | | Unexported TC list.
+tc_id | string | TC ID.
 
-### Request
-
-Field | Data Type | Description
---------- | ------- | ----------- | -----------
-Status | integer | 200 if success.
-Message | string | Empty if success. If error, show error message
-
-## Trade Confirmation Cancel Notification
-Notify client when user cancel the Trade Confirmation.
+## Trade Confirmation Detail
+Get specified Trade Confirmation detail.
 
 ### HTTP Request
 
-Komodo will call client's <code>TC_CANCEL_URL</code> service.
+`GET https://dev.gokomodo.co/v1/api/trade-confirmations/{TC_ID}`
 
-> WSDL
+### Parameters
+Field | Data Type | Description
+--------- | ------- | ----------- | -----------
+TC_ID | string | Trade Confirmation ID.
 
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions targetNamespace="urn:sap-com:document:sap:soap:functions:mc-style"
-	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
-	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
-	xmlns:tns="urn:sap-com:document:sap:soap:functions:mc-style"
-	xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
-	xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
-	xmlns:n1="urn:sap-com:document:sap:rfc:functions">
-	<wsdl:documentation>
-		<sidl:sidl
-			xmlns:sidl="http://www.sap.com/2007/03/sidl"/>
-		</wsdl:documentation>
-		<wsp:UsingPolicy wsdl:required="true"/>
-		<wsp:Policy wsu:Id="IF_ZWS_TEST1">
-			<sapsession:Session
-				xmlns:sapsession="http://www.sap.com/webas/630/soap/features/session/">
-				<sapsession:enableSession>false</sapsession:enableSession>
-			</sapsession:Session>
-		</wsp:Policy>
-		<wsp:Policy wsu:Id="OP_ZwsTest">
-			<sapcomhnd:enableCommit
-				xmlns:sapcomhnd="http://www.sap.com/NW05/soap/features/commit/">false
-			</sapcomhnd:enableCommit>
-			<sapblock:enableBlocking
-				xmlns:sapblock="http://www.sap.com/NW05/soap/features/blocking/">true
-			</sapblock:enableBlocking>
-			<saptrhnw05:required
-				xmlns:saptrhnw05="http://www.sap.com/NW05/soap/features/transaction/">no
-			</saptrhnw05:required>
-			<saprmnw05:enableWSRM
-				xmlns:saprmnw05="http://www.sap.com/NW05/soap/features/wsrm/">false
-			</saprmnw05:enableWSRM>
-		</wsp:Policy>
-		<wsdl:types>
-			<xsd:schema attributeFormDefault="qualified" targetNamespace="urn:sap-com:document:sap:soap:functions:mc-style"
-				xmlns:n0="urn:sap-com:document:sap:rfc:functions">
-				<xsd:import namespace="urn:sap-com:document:sap:rfc:functions"/>
-				<xsd:element name="TradeConfirmation">
-                    <xsd:complexType>
-                        <xsd:sequence>
-                            <xsd:element name="No" type="xsd:string"/>
-                        </xsd:sequence>
-                    </xsd:complexType>
-                </xsd:element>
-				<xsd:element name="TradeConfirmationResp">
-					<xsd:complexType>
-						<xsd:sequence>
-							<xsd:element name="Status" type="xsd:int"/>
-              <xsd:element name="Message" type="xsd:string"/>
-						</xsd:sequence>
-					</xsd:complexType>
-				</xsd:element>
-			</xsd:schema>
-		</wsdl:types>
-		<wsdl:message name="TradeConfirmationRequest">
-			<wsdl:part name="parameters" element="tns:TradeConfirmation"/>
-		</wsdl:message>
-		<wsdl:message name="TradeConfirmationResponse">
-			<wsdl:part name="parameter" element="tns:TradeConfirmationResp"/>
-		</wsdl:message>
-		<wsdl:portType name="ZWS_TEST1">
-			<wsp:Policy>
-				<wsp:PolicyReference URI="#IF_ZWS_TEST1"/>
-			</wsp:Policy>
-			<wsdl:operation name="ZwsTest">
-				<wsp:Policy>
-					<wsp:PolicyReference URI="#OP_ZwsTest"/>
-				</wsp:Policy>
-				<wsdl:input message="tns:TradeConfirmationRequest"/>
-				<wsdl:output message="tns:TradeConfirmationResponse"/>
-			</wsdl:operation>
-		</wsdl:portType>
-	</wsdl:definitions>
+> Success Response
+
+```json
+{
+  "status": 200,
+  "message": "Success",
+  "data":{
+    "tc_id": "TC-123456",
+    "rfq_id": "RFQ-123456",
+    "vendor_id": 123,
+    "root_category": "Information Technology",
+    "company_name": "PT Star Wars enterprise",
+    "company_id": 1,
+    "internal_id": "ABC",
+    "delivery_method": 1,
+    "dph_no": "DPH001",
+    "email": "buyer@mail.com",
+    "include_tax": true,
+    "tax_value": 10,
+    "tax_type": "percent",
+    "tax_total": 99000,
+    "discount_value": 50000,
+    "discount_type": "amount",
+    "discount_total": 10000,
+    "payment_term": {
+      "id": "001",
+      "text": "Cicilan"
+    },
+    "tc_deliveries": [
+      {
+        "tc_delivery_items": [
+          {
+            "pr_id": "000000123",
+            "pr_item_id": "00010",
+            "material_number": "13234324343243",
+            "plant": "ABC0",
+            "unit_cost": 10000,
+            "delivery_cost": 0,
+            "delivered_unit_cost": 10000,
+            "quantity": 10,
+            "discount_value": 10,
+            "discount_type": "percent",
+            "discount_total": 10000,
+            "total": 90000,
+            "notes": ""
+          },
+          {
+            "pr_id": "000000789",
+            "pr_item_id": "00020",
+            "material_number": "112233445566",
+            "plant": "ABC0",
+            "unit_cost": 10000,
+            "delivery_cost": 0,
+            "delivered_unit_cost": 10000,
+            "quantity": 10,
+            "discount_value": 10,
+            "discount_type": "percent",
+            "discount_total": 10000,
+            "total": 90000,
+            "notes": ""
+          }
+        ],
+        "total": 90000,
+        "total_delivery_cost": 0
+      }
+    ]
+  }
+}
 ```
 
-### Request
+### Response
 
 Field | Data Type | Description
 --------- | ------- | ----------- | -----------
-No | string | Trade Confirmation No
-
-### Request
-
-Field | Data Type | Description
---------- | ------- | ----------- | -----------
-Status | integer | 200 if success.
-Message | string | Empty if success. If error, show error message
-
+tc_id | string | Trade Confirmation no.
+rfq_id | string | RFQ ID.
+vendor_id | integer | Vendor ID.
+root_category | string | RFQ root category.
+company_name | string | Buyer company name.
+company_id | integer | Buyer company ID.
+internal_id | string | Buyer company ERP id/code.
+delivery_method | integer | Delivery method 0-2 (0 = Franco, 1 = With delivery cost, 2 = Per product delivery cost).
+dph_no | string | DPH No.
+email | string | Trade Confirmation creator's email.
+include_tax | boolean | Include tax.
+tax_type | string | Percent or amount.
+tax_value | double | TC Tax value or amount.
+tax_total | double | TC total tax.
+discount_type | string | Percent or amount.
+discount_value | double | TC Discount value or amount.
+discount_total | double | TC discount.
+total | double | TC Total.
+**tc_deliveries** |  |
+  **tc_delivery_items** | |
+    pr_id | string | Purchase Requisition ID.
+    pr_item_id | string | Purchase Requisition Item ID.
+    material_number | string | Material number.
+    plant | string | Delivery destination company id/code.
+    unit_cost | double | Unit Cost.
+    quantity | integer | Quantity.
+    delivery_cost | double | Delivery Cost.
+    discount_type | string | Percent or amount.
+    discount_value | double | Item Discount value or amount.
+    discount_total | double | Item total discount.
+    total | double | Total amount.
+    notes | string | Product specification.
+  total | double | Delivery total amount
+  total_delivery_cost | double | Delivery total cost.
+**payment_term** |  |
+  id | string | Payment Term id/code
+  text | string | Payment Term text
 
 ## Purchase Order Notification
 After created Purchase Order in client's system, use this service to update Trade Confirmation with Purchase Order number
 
 ### HTTP Request
 
-`PUT https://dev.gokomodo.co/api/trade-confirmations`
+`PUT https://dev.gokomodo.co/v1/api/trade-confirmations`
 
 > Request Sample
 
 ```json
 {
-  "tc_id": "TC-X79Y0Z",
-  "po_no": "PO-12323123"
+  "tc_id": "X79Y0Z",
+  "po_no": "12323123"
 }
 ```
 
@@ -649,13 +435,13 @@ After updating Purchase Order in client's system, use this service to update Tra
 
 ### HTTP Request
 
-`PUT https://dev.gokomodo.co/api/purchase-orders`
+`PUT https://dev.gokomodo.co/v1/api/purchase-orders`
 
 > Request Sample
 
 ```json
 {
-  "po_no": "PO-12323123",
+  "po_no": "12323123",
   "deliveries":[
     {
       "items":[
